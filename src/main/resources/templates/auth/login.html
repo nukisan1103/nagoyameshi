@@ -32,7 +32,9 @@
 						<div th:if="${param.error}" class="alert alert-danger">
 							メールアドレスまたはパスワードが正しくありません。
 						</div>
-
+						<!--ログインフォームの送信先である「/login（POSTメソッド）」を担当するメソッドはコントローラに定義して
+						ないが、springsecurityの昨日により、WebSecurityConfigクラスのloginProcessingUrl()メソッドに設定
+						したURLにフォームが送信されると、自動的にログイン処理が実施される。-->
 						<form th:action="@{/login}" method="post">
 							<div class="form-group mb-3">
 								<input type="text" class="form-control" name="username" autocomplete="email"

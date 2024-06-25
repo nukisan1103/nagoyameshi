@@ -69,7 +69,9 @@ public class UserService {
         
     	user.setRole(role);
     	paid.setUser(upgradeUser);
-        paid.setNominee(paidRegistForm.getNominee());     
+        paid.setNominee(paidRegistForm.getNominee()); 
+        paid.setCard_number(paidRegistForm.getCard_number());
+        paid.setSec_number(paidRegistForm.getSec_number());
         paid.setCard_type(paidRegistForm.getCard_type());
         paid.setPeriod_year(paidRegistForm.getPeriod_year());
         paid.setPeriod_month(paidRegistForm.getPeriod_month());      

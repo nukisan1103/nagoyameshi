@@ -18,7 +18,7 @@
                          <div class="col-xxl-9 col-xl-10 col-lg-11">
                              <nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                                  <ol class="breadcrumb mb-0"> 
-                                     <li class="breadcrumb-item"><a th:href="@{/admin/restaurants}">ホーム</a></li>                       
+                                     <li class="breadcrumb-item"><a th:href="@{/restaurants/subscriber}">ホーム</a></li>                       
                                      <li class="breadcrumb-item active" aria-current="page">レビュー一覧</li>
                                  </ol>
                              </nav> 
@@ -41,7 +41,7 @@
                                  <tbody>                                                    
                                      <tr th:each="review : ${reviewPage}">
                                          <td>
-                                             <a th:href="@{/admin/restaurants/__${review.getRestaurant().getId()}__}" th:text="${review.getRestaurant().getName()}"></a>
+                                             <a th:href="@{/restaurants/subscriber/__${review.getRestaurant().getId()}__}" th:text="${review.getRestaurant().getName()}"></a>
                                          </td>
                                          <td th:text="${review.getSentense()}"></td>
                                          <td th:text="${review.getScore()}"></td>

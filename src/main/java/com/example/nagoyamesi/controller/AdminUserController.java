@@ -64,15 +64,6 @@ public class AdminUserController {
 		Role role = roleRepository.findByName(keyword);
 		userPage = userRepository.findByRole(role, pageable);
 		
-	
-//		if (keyword.equals("ROLE_GENERAL")) {
-//			Role role = roleRepository.findByName("ROLE_GENERAL");
-//			userPage = userRepository.findByRole(role, pageable);
-//		} else {
-//			Role role = roleRepository.findByName("ROLE_SUBSCRIBER");
-//			userPage = userRepository.findByRole(role, pageable);
-//		}
-		
 
 		model.addAttribute("userPage", userPage);
 

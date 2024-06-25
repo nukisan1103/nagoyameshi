@@ -28,6 +28,12 @@ public class PaidRegist {
     @Column(name = "nominee")
     private String nominee;
     
+    @Column(name = "card_number")
+    private String card_number;
+    
+    @Column(name = "sec_number")
+    private String sec_number;
+    
     @Column(name = "card_type")
     private String card_type;   
     

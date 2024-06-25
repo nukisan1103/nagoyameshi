@@ -72,7 +72,7 @@ public class ReservationController {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("restaurants", restaurant);
 			model.addAttribute("errorMessage", "予約内容に不備があります。");
-			return "admin/restaurants/show";
+			return "subscriber/restaurants/show";
 		}
 
 		redirectAttributes.addFlashAttribute("reservationInputForm", reservationInputForm);

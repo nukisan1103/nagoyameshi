@@ -74,6 +74,8 @@ CREATE TABLE IF NOT EXISTS verification_tokens (
      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
      user_id INT NOT NULL,
      nominee VARCHAR(255) NOT NULL,  
+     card_number VARCHAR(255) NOT NULL,
+     sec_number VARCHAR(255) NOT NULL,
      card_type VARCHAR(50) NOT NULL,
      period_year VARCHAR(50) NOT NULL,
      period_month VARCHAR(50) NOT NULL,

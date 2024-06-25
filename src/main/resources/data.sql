@@ -63,5 +63,5 @@ INSERT IGNORE INTO reservations (id, restaurant_id, user_id, reservation_datetim
 INSERT IGNORE INTO reservations (id, restaurant_id, user_id, reservation_datetime, reservation_time, number_of_people) VALUES (12, 12, 6, '2023-04-01', '11:00', 2);
 
 --method_of_paymentテーブル--
-INSERT IGNORE INTO method_of_payment (id, user_id,nominee,card_type,period_year,period_month) VALUES (1, 10,'hatiro','VISA','2024','09');
+INSERT IGNORE INTO method_of_payment (id, user_id,nominee,card_number,sec_number,card_type,period_year,period_month) VALUES (1, 10,'hatiro','3333-3333-3333','234','VISA','2024','09');
 

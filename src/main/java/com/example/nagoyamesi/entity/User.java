@@ -20,7 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-
+    
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

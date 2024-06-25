@@ -27,7 +27,7 @@
 
 						<h1 class="mb-4 text-center">レビュー投稿</h1>
 
-						<form method="post" th:action="@{/admin/__${restaurants.getId()}__/review/create}" th:object="${reviewForm}"
+						<form method="post" th:action="@{/__${restaurants.getId()}__/review/create}" th:object="${reviewForm}"
 							enctype="multipart/form-data">
 
 							<div class="form-group row mb-3">

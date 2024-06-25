@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyamesi.entity.Restaurant;
@@ -27,7 +26,6 @@ import com.example.nagoyamesi.security.UserDetailsImpl;
 import com.example.nagoyamesi.service.ReviewService;
 
 @Controller
-@RequestMapping("/admin")
 public class ReviewController {
 	
  private final ReviewRepository reviewRepository;      
@@ -65,13 +63,22 @@ public class ReviewController {
          return "review/post";
     	 
      }
+     @GetMapping("/{id}/review/show")
+     public String showReview(@PathVariable(name = "id") Integer id,Model model) {
+    	 
+    	 Restaurant restaurants = restaurantRepository.getReferenceById(id);
+    	 model.addAttribute("restaurants",restaurants);
+    	 model.addAttribute("reviewForm", new ReviewForm());
+         return "review/post";
+    	 
+     }
      @PostMapping("/{id}/review/create")
      public String reviewCreate(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
     		 @ModelAttribute @Validated ReviewForm reviewForm,RedirectAttributes redirectAttributes,BindingResult bindingResult
     		 ,@PathVariable(name = "id") Integer id) {
     	     	 
     	 if (bindingResult.hasErrors()) {
-             return "admin/restautants/index";
+             return "/subscriber/restautants/index";
          }
     	 
     	 User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId()); 
@@ -80,7 +87,7 @@ public class ReviewController {
     	 reviewservice.create(user,restaurants,reviewForm);
     	 redirectAttributes.addFlashAttribute("successMessage", "レビューを登録しました。");   
     	 
-    	 return "redirect:/admin/restaurants";
+    	 return "redirect:/restaurants/subscriber";
      }
 
 }

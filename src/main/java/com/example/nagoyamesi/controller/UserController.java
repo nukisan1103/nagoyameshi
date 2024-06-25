@@ -67,7 +67,6 @@ public class UserController {
     }    
     @GetMapping("/paidregistration")
     public String paidRegistration(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {         
-        User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());  
        
         model.addAttribute("paidRegistForm", new PaidRegistForm());
    
@@ -82,6 +81,6 @@ public class UserController {
         userService.upgrade(paidRegistForm, user);
         
         redirectAttributes.addFlashAttribute("successMessage", "有料会員にアップグレードしました。");
-        return "redirect:/user";
+        return "redirect:/?loggedOut";
     }
 }

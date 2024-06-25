@@ -59,12 +59,13 @@
 
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
 								<div class="dropdown-divider"></div>
-								
+
 								<a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/user}">会員情報</a>
-								<a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/user/paidregistration}">有料会員アップグレード</a>
+								<a class="dropdown-item nagoyameshi-dropdown-item"
+									th:href="@{/user/paidregistration}">有料会員アップグレード</a>
 								<!--何故かロールで弾かれる。。-->
 								<a class="dropdown-item nagoyameshi-dropdown-item"
-									th:href="@{/admin/restaurants}">店舗一覧</a>
+									th:href="@{/restaurants}">店舗一覧</a>
 								<a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}"
 									onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 									ログアウト
@@ -85,8 +86,8 @@
 								<div class="dropdown-divider"></div>
 
 								<a class="dropdown-item nagoyameshi-dropdown-item"
-									th:href="@{/admin/restaurants}">店舗一覧</a>
-								<a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/admin/review}">レビュー一覧</a>
+									th:href="@{/restaurants/subscriber}">店舗一覧</a>
+								<a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/admin/review}">レビュー投稿履歴</a>
 
 								<a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/reservations}">予約一覧</a>
 								<a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}"
