@@ -21,7 +21,7 @@
 
 						<h1 class="mb-4 text-center">有料会員アップグレード</h1>
 
-						<form method="post" th:action="@{/user/upgrade}" th:object="${paidRegistForm}"
+						<form method="post" th:action="@{/user/upgradeConfirm}" th:object="${paidRegistInputForm}"
 							enctype="multipart/form-data">
 
 
@@ -137,10 +137,7 @@
 							</div>
 						</form>
 
-						<div class="text-center">
-							<a th:href="@{/login}">ログイン</a>
-						</div>
-						<form id="credit-card-form" action="https://yoursite/purchase.html" method="POST">
+						
 					</div>
 				</div>
 

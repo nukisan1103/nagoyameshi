@@ -15,19 +15,11 @@
 		<div th:replace="~{fragment :: header}"></div>
 
 		<main>
-			<!--テストログイン用データ-->
-			<p5 class="mb-4 text-center">共通パスワード：password</p5> <br>
-
-			<p5>（無料会員）ユーザー名：rokuro@gmail.com</p5> <br>
-			<p5 class="mb-4 text-center">（有料会員）ユーザー名：hati@gmail.com</p5> <br>
-			<p5 class="mb-4 text-center">（管理者）ユーザー名：nana@gmail.com</p5>
-			<div class="container pt-4 pb-5 nagoyameshi-container">
+			
+			<div class="container pt-4 pb-8 nagoyameshi-container">
 				<div class="row justify-content-center">
 					<div class="col-xl-3 col-lg-4 col-md-5 col-sm-7">
 						<h1 class="mb-4 text-center">ログイン</h1>
-
-
-
 
 						<div th:if="${param.error}" class="alert alert-danger">
 							メールアドレスまたはパスワードが正しくありません。
@@ -56,8 +48,14 @@
 								会員登録
 							</a>
 
+						</div><br>
+						
+						<div class="text-center">
+							<a th:href="@{/passwordChange}">
+								パスワードを忘れた方はこちら
+							</a>
 						</div>
-				
+										
 					</div>
 				</div>
 			</div>

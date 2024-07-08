@@ -31,8 +31,10 @@
 									<button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button>
 								</div>
 							</form>
-							<a sec:authorize="hasRole('ROLE_ADMIN')"th:href="@{/admin/restaurants/register}"
-								class="btn text-white shadow-sm mb-3 nagoyameshi-btn">登録</a>
+							<a th:href="@{/admin/restaurants/restaurantRegister}"
+								class="btn text-white shadow-sm mb-3 nagoyameshi-btn">店舗新規登録</a>
+								<a th:href="@{/admin/restaurants/categoryRegister}"
+								class="btn text-white shadow-sm mb-3 nagoyameshi-btn">カテゴリー新規登録</a>
 						</div>
 						<div th:if="${successMessage}" class="alert alert-info">
 							<span th:text="${successMessage}"></span>
@@ -43,6 +45,7 @@
 								<tr>
 									<th scope="col">ID</th>
 									<th scope="col">店舗名</th>
+									<th scope="col">カテゴリー名</th>
 									<th scope="col">住所</th>
 									<th scope="col">電話番号</th>
 									<th scope="col"></th>
@@ -53,15 +56,16 @@
 								<tr th:each="restaurants : ${restaurants}">
 									<td th:text="${restaurants.getId()}"></td>
 									<td th:text="${restaurants.getName()}"></td>
+									<td th:text="${restaurants.getCategoryName()}"></td>
 									<td th:text="${restaurants.getAddress()}"></td>
 									<td th:text="${restaurants.getPhone_number()}"></td>
 									<td><a th:href="@{/admin/restaurants/__${restaurants.getId()}__}">詳細</a> </td>
-									<td  sec:authorize="hasRole('ROLE_ADMIN')" ><a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal"
+									<td ><a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal"
 											th:data-bs-target="${'#deleterestaurantModal' + restaurants.getId()}">削除</a>
 									</td>
 
 
-									<!--reviesテーブルの外部キーがrestaurantテーブルのIDを参照しているので消せない？-->
+									
 									<!-- 削除用モーダル -->
 									<div class="modal fade" th:id="${'deleterestaurantModal' + restaurants.getId()}"
 										tabindex="-1"
@@ -86,7 +90,7 @@
 										</div>
 									</div>
 								</tr>
-								</tr>
+
 							</tbody>
 						</table>
 						<!-- ページネーション -->

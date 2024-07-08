@@ -42,7 +42,7 @@ public class ReviewController {
          this.restaurantRepository = restaurantRepository;
         
      }    
- 
+     //レビュー一覧ページへ
      @GetMapping("/review")
      public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable, Model model) {
          User user = userDetailsImpl.getUser();
@@ -53,7 +53,7 @@ public class ReviewController {
          return "review/index";
      }
      
-     
+     //レビュー投稿ページへ
      @GetMapping("/{id}/review")
      public String postReview(@PathVariable(name = "id") Integer id,Model model) {
     	 
@@ -63,15 +63,27 @@ public class ReviewController {
          return "review/post";
     	 
      }
+     
+     //全ユーザーレビュー投稿一覧へ
      @GetMapping("/{id}/review/show")
-     public String showReview(@PathVariable(name = "id") Integer id,Model model) {
+     public String showReview(@PathVariable(name = "id") Integer id,Model model
+    		 ,@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
     	 
+    	 Page<Review> reviewPage;
     	 Restaurant restaurants = restaurantRepository.getReferenceById(id);
-    	 model.addAttribute("restaurants",restaurants);
-    	 model.addAttribute("reviewForm", new ReviewForm());
-         return "review/post";
+    	 
+    	 reviewPage = reviewRepository.findByRestaurant(restaurants, pageable);
+    	 
+    	
+    	 model.addAttribute("reviewPage",reviewPage);
+    	 
+    
+    	
+         return "review/show";
     	 
      }
+     
+     //レビュー登録完了
      @PostMapping("/{id}/review/create")
      public String reviewCreate(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
     		 @ModelAttribute @Validated ReviewForm reviewForm,RedirectAttributes redirectAttributes,BindingResult bindingResult
@@ -88,6 +100,18 @@ public class ReviewController {
     	 redirectAttributes.addFlashAttribute("successMessage", "レビューを登録しました。");   
     	 
     	 return "redirect:/restaurants/subscriber";
+     }
+     
+     //レビュー削除用
+     @GetMapping("/{id}/review/delete")
+     public String reviewDelete(@PathVariable(name = "id") Integer id,Model model,RedirectAttributes redirectAttributes) {
+    	   	
+    	 reviewRepository.deleteById(id);
+    	 
+    	 redirectAttributes.addFlashAttribute("successMessage", "レビューを削除しました。");   
+    	 
+    	 return "redirect:/review";
+    	 
      }
 
 }

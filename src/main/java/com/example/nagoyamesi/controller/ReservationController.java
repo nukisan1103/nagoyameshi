@@ -1,5 +1,9 @@
 package com.example.nagoyamesi.controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -51,23 +55,101 @@ public class ReservationController {
 		return "reservation/index";
 	}
 
+	//店舗詳細画面から予約管理画面へ遷移。その時、予約重複が内科の確認するロジックも作成
 	@GetMapping("/restaurants/{id}/reservations/input")
-	public String input(@PathVariable(name = "id") Integer id,
+	public String input(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+			@PathVariable(name = "id") Integer id,
 			@ModelAttribute @Validated ReservationInputForm reservationInputForm,
 			BindingResult bindingResult,
 			RedirectAttributes redirectAttributes,
-			Model model) {
+			Model model, Pageable pageable) {
+
+		//予約対象の店舗データを取得
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
+		//予約フォームに入力した予約日の取得
+		LocalDate mydate = reservationInputForm.getReservationDate();
+		//予約フォームに入力した予約時間の取得
+		LocalTime mytime = reservationInputForm.getReservationTime();
+		//現在日を取得
+		LocalDate nowdate = LocalDate.now();
+		//現在の時間を取得
+		LocalTime nowtime = LocalTime.now();
+		//自分が指定した予約人数
 		Integer numberOfPeople = reservationInputForm.getNumberOfPeople();
+		//予約希望の店舗の定員数を取得
 		Integer capacity = restaurant.getCapacity();
 
+		//ログインユーザーの情報取得		
+		User user = userDetailsImpl.getUser();
+	
+	
+		//----------自分が既に希望店舗に予約しているかどうかを確認---------------
+		Reservation alreadyCheck = reservationRepository.findByUserAndRestaurant(user,restaurant);
+	
+		if (alreadyCheck != null && reservationService.isSameDate(mydate, alreadyCheck.getReservationDateTime())) {
+		    FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationDate",
+		            "あなたは既に当日予約されております。");
+		    bindingResult.addError(fieldError);
+		}
+
+			if (bindingResult.hasErrors()) {
+				model.addAttribute("restaurants", restaurant);
+				model.addAttribute("errorMessage", "予約内容に不備があります。");
+				return "subscriber/restaurants/show";
+			}
+		//-----------------------------------------------------------------
+		
+		
+		//----自分の予約希望時点に、既に定員人数を来店人数が超えていたらエラー表示-----	
+		List<Reservation> timeSearch = 
+				reservationRepository.findByRestaurantAndReservationDateTimeAndReservationTime(restaurant,mydate,mytime);
+		reservationService.capaCheck(timeSearch,numberOfPeople,capacity);
+		
+		
+			if(!reservationService.capaCheck(timeSearch,numberOfPeople,capacity)) {
+				FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationTime",
+						"その時間は満席で現在予約できません。");
+				bindingResult.addError(fieldError);
+			}
+			if (bindingResult.hasErrors()) {
+				model.addAttribute("restaurants", restaurant);
+				model.addAttribute("errorMessage", "予約内容に不備があります。");
+				return "subscriber/restaurants/show";
+			}		
+		//-----------------------------------------------------------------
+
+
+		//------------------------------入力フォームチェック用------------------------------------
+		//店舗の定員を超えた場合はエラー文を返す。
 		if (numberOfPeople != null) {
 			if (!reservationService.isWithinCapacity(numberOfPeople, capacity)) {
 				FieldError fieldError = new FieldError(bindingResult.getObjectName(), "numberOfPeople",
 						"来店人数が定員を超えています。");
 				bindingResult.addError(fieldError);
 			}
+			//予約希望日が過去日だった場合はエラー文を返す。
+			if (mydate != null && !(mydate.equals(nowdate))) {
+				if (!reservationService.dateCheck(mydate, nowdate)) {
+					FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationDate",
+							"過去の日付は選択出来ません。");
+					bindingResult.addError(fieldError);
+				}
+			}
+			//予約希望時間が過去日且つ、予約指定時間から二時間以内であればそれぞれエラー文を返す。
+			if (mytime != null && !(mytime.equals(nowtime))) {
+				if (!reservationService.timeCheck(mytime, nowtime) && !reservationService.dateCheck(mydate, nowdate)) {
+					FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationTime",
+							"過去の時間は選択出来ません。");
+					bindingResult.addError(fieldError);
+				}
+				//				}if (!(reservationService.twoHoursLaterCheck(mytime, twoHoursLater))) {
+				//					FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationTime",
+				//							"予約は二時間後から可能です。");
+				//					bindingResult.addError(fieldError);
+				//				}
+			}
 		}
+
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("restaurants", restaurant);
@@ -104,4 +186,15 @@ public class ReservationController {
 
 		return "redirect:/reservations?reserved";
 	}
+	
+	@PostMapping("/reservation/{id}/cancel")
+	public String reservationCancel(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		
+		reservationRepository.deleteById(id);
+		
+		
+		redirectAttributes.addFlashAttribute("successMessage", "予約をキャンセルしました。");
+		return "redirect:/reservations";
+	}
+	
 }

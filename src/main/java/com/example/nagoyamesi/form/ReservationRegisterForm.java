@@ -1,5 +1,8 @@
 package com.example.nagoyamesi.form;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -10,9 +13,9 @@ public class ReservationRegisterForm {
         
     private Integer userId;    
         
-    private String reservationDate;    
+    private LocalDate reservationDate;    
         
-    private String reservationTime;    
+    private LocalTime reservationTime;    
     
     private Integer numberOfPeople;
     

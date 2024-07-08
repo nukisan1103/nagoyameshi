@@ -15,6 +15,9 @@ public class RestaurantEditForm {
 	 @NotNull
      private Integer id;    
 	 
+	@NotBlank(message = "カテゴリーを入力してください。")
+	private String category_name;
+	 
     @NotBlank(message = "店舗名を入力してください。")
     private String name;
         

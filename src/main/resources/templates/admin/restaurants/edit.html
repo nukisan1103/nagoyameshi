@@ -62,15 +62,31 @@
 
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
-									<label for="restaurants_description" class="col-form-label text-md-left fw-bold">説明</label>
+									<label for="restaurants_description"
+										class="col-form-label text-md-left fw-bold">説明</label>
 								</div>
 								<div class="col-md-8">
-									<div th:if="${#fields.hasErrors('restaurants_description')}" class="text-danger small mb-2"
-										th:errors="*{restaurants_description}"></div>
+									<div th:if="${#fields.hasErrors('restaurants_description')}"
+										class="text-danger small mb-2" th:errors="*{restaurants_description}"></div>
 									<textarea class="form-control" th:field="*{restaurants_description}" cols="30"
 										rows="5"></textarea>
 								</div>
 							</div>
+
+
+							<div class="form-group row mb-3">
+								<div class="col-md-4">
+									<label for="restaurants_description"
+										class="col-form-label text-md-left fw-bold">カテゴリー</label>
+								</div>
+								<div class="col-md-8">
+								<select class="form-control" name="category"th:field="*{category_name}">
+										<option th:each="category : ${categories}" th:value="${category.getCategory()}"
+											th:text="${category.getCategory()}"></option>
+									</select>
+								</div>
+							</div>
+
 
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
@@ -95,7 +111,7 @@
 									<input type="number" class="form-control" th:field="*{highest_price}">
 								</div>
 							</div>
-							
+
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="opening_time" class="col-form-label text-md-left fw-bold">開店時間</label>
@@ -106,7 +122,7 @@
 									<input type="text" class="form-control" th:field="*{opening_time}">
 								</div>
 							</div>
-							
+
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="closing_time" class="col-form-label text-md-left fw-bold">閉店時間</label>
@@ -117,8 +133,8 @@
 									<input type="text" class="form-control" th:field="*{closing_time}">
 								</div>
 							</div>
-							
-								<div class="form-group row mb-3">
+
+							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="regular_holiday" class="col-form-label text-md-left fw-bold">定休日</label>
 								</div>
@@ -128,7 +144,7 @@
 									<input type="text" class="form-control" th:field="*{regular_holiday}">
 								</div>
 							</div>
-							
+
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="capacity" class="col-form-label text-md-left fw-bold">定員（単位：人）</label>
@@ -140,7 +156,7 @@
 								</div>
 							</div>
 
-						
+
 
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
@@ -166,8 +182,7 @@
 
 
 							<div class="form-group d-flex justify-content-center my-4">
-								<button type="submit"
-									class="btn text-white shadow-sm w-50 nagoyameshi-btn">更新</button>
+								<button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">更新</button>
 							</div>
 						</form>
 					</div>

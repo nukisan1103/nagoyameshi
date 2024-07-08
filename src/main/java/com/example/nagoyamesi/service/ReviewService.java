@@ -1,8 +1,6 @@
 package com.example.nagoyamesi.service;
 
 
-
-
 import org.springframework.stereotype.Service;
 
 import com.example.nagoyamesi.entity.Restaurant;
@@ -34,5 +32,5 @@ public class ReviewService {
 
 		reviewRepository.save(review);
 	}
-
+	  
 }

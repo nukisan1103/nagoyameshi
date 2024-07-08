@@ -14,20 +14,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyamesi.entity.User;
 import com.example.nagoyamesi.form.PaidRegistForm;
+import com.example.nagoyamesi.form.PaidRegistInputForm;
 import com.example.nagoyamesi.form.UserEditForm;
 import com.example.nagoyamesi.repository.UserRepository;
 import com.example.nagoyamesi.security.UserDetailsImpl;
+import com.example.nagoyamesi.service.StripeService;
 import com.example.nagoyamesi.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
     private final UserRepository userRepository;    
     private final UserService userService; 
+    private final StripeService stripeService; 
     
-    public UserController(UserRepository userRepository, UserService userService) {
+    public UserController(UserRepository userRepository, UserService userService
+    		, StripeService stripeService) {
         this.userRepository = userRepository;  
         this.userService = userService;
+        this.stripeService = stripeService;
     }    
     
     @GetMapping
@@ -66,21 +73,32 @@ public class UserController {
         return "redirect:/user";
     }    
     @GetMapping("/paidregistration")
-    public String paidRegistration(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {         
+    public String paidRegistration(Model model) {         
        
-        model.addAttribute("paidRegistForm", new PaidRegistForm());
-   
+        model.addAttribute("paidRegistInputForm", new PaidRegistInputForm());
         
         return "user/paidregist";
     }
-    @PostMapping("/upgrade")
-    public String upgrade(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
-    		PaidRegistForm paidRegistForm,RedirectAttributes redirectAttributes,Model model) {         
-        User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());  
-       
-        userService.upgrade(paidRegistForm, user);
-        
-        redirectAttributes.addFlashAttribute("successMessage", "有料会員にアップグレードしました。");
-        return "redirect:/?loggedOut";
+    @PostMapping("/upgradeConfirm")
+    public String upgradeConfirm(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+    		@ModelAttribute PaidRegistInputForm paidRegistInputForm
+    		,Model model, HttpServletRequest httpServletRequest) {         
+    	
+    	User user = userDetailsImpl.getUser();
+    	
+    	PaidRegistForm paidRegistForm = new PaidRegistForm(user.getId(),paidRegistInputForm.getNominee(),paidRegistInputForm.getCard_number()
+    			,paidRegistInputForm.getSec_number(),paidRegistInputForm.getCard_type(),paidRegistInputForm.getPeriod_year()
+    			,paidRegistInputForm.getPeriod_month());
+    	
+    	 String sessionId = stripeService.createStripeSession(paidRegistForm, httpServletRequest);
+    	 
+    	   // セッションIDをログに出力
+    	    System.out.println("Generated sessionId: " + sessionId);
+
+    	
+    	 model.addAttribute("paidRegistForm", paidRegistForm);
+    	 model.addAttribute("sessionId", sessionId);
+    	 return "user/paidconfirm";
+    	     
     }
 }

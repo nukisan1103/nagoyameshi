@@ -21,18 +21,22 @@
 					<div class="col-xl-5 col-lg-6 col-md-8">
 						<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 							<ol class="breadcrumb mb-0">
-								<li class="breadcrumb-item"><a th:href="@{/admin/restaurants}">店舗一覧</a></li>
+								<li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a></li>
 								<li class="breadcrumb-item active" aria-current="page">店舗詳細</li>
 							</ol>
 						</nav>
 
 						<h1 class="mb-4 text-center" th:text="${restaurants.getName()}"></h1>
-
+						
+						<div class="d-flex justify-content-end align-items-end mb-3">
+							<a th:href="@{/__${restaurants.getId()}__/review/show}">全てのレビューを閲覧する</a>
+						</div>
+						
 						<div class="d-flex justify-content-end align-items-end mb-3">
 							<div>
 								<a th:href="@{/admin/__${restaurants.getId()}__/review}"
 									sec:authorize="hasRole('ROLE_SUBSCRIBER')">レビューを投稿する</a>
-								
+
 								<a th:href="@{/admin/restaurants/__${restaurants.getId()}__/edit}"
 									sec:authorize="hasRole('ROLE_ADMIN')">編集</a>
 							</div>
@@ -128,23 +132,22 @@
 								</div>
 							</div>
 						</div>
-						
-						
+
+
 						<div sec:authorize="hasRole('ROLE_SUBSCRIBER')" class="col-lg-4 px-0 ps-lg-4 mb-4">
 							<div class="card">
 								<div class="card-body">
-									<form method="get" th:action="@{/restaurants/__${restaurants.getId()}__/reservations/input}"
+									<form method="get"
+										th:action="@{/restaurants/__${restaurants.getId()}__/reservations/input}"
 										th:object="${reservationInputForm}">
 										<div class="form-group mb-2">
 											<label for="reservationDate"
 												class="col-form-label text-md-left fw-bold">予約日</label>
 											<div th:if="${#fields.hasErrors('reservationDate')}"
-												class="text-danger small mb-2"
-												th:errors="*{reservationDate}"></div>
-											<input type="text" class="form-control"
-												th:field="*{reservationDate}">
+												class="text-danger small mb-2" th:errors="*{reservationDate}"></div>
+											<input type="text" class="form-control" th:field="*{reservationDate}">
 										</div>
-										
+
 										<div class="form-group mb-4">
 											<label for="reservationTime"
 												class="col-form-label text-md-left fw-bold">時間</label>

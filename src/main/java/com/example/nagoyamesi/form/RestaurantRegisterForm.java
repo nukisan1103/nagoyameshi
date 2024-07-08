@@ -11,6 +11,9 @@ import lombok.Data;
 public class RestaurantRegisterForm {
     @NotBlank(message = "店舗名を入力してください。")
     private String name;
+    
+
+    private String category_name;   
         
     private MultipartFile imageFile;
     

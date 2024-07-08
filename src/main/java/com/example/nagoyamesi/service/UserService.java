@@ -59,6 +59,7 @@ public class UserService {
         userRepository.save(user);
     }    
     
+    //無料会員を有料会員にアップグレード
     @Transactional
     public void upgrade(PaidRegistForm paidRegistForm,User upgradeUser) {
     	//getReferenceById関数で、編集対象のユーザーのIDを取得する
@@ -100,7 +101,16 @@ public class UserService {
               public boolean isEmailChanged(UserEditForm userEditForm) {
                   User currentUser = userRepository.getReferenceById(userEditForm.getId());
                   return !userEditForm.getEmail().equals(currentUser.getEmail());      
-              }  
+              }
+
+            @Transactional
+			public void passReset(String password, Integer id) {
+				User user =  userRepository.getReferenceById(id);
+				
+				  user.setPassword(passwordEncoder.encode(password));
+				  
+				  userRepository.save(user);				
+			}  
              
 
 	

@@ -55,7 +55,7 @@ public class AdminUserController {
 	}
 
 	@GetMapping("/roleresearch")
-	public String roleReserch(@RequestParam(name = "keyword", required = false) String keyword,
+	public String roleSearch(@RequestParam(name = "keyword", required = false) String keyword,
 			@PageableDefault(page = 0, size = 20, sort = "id", direction = Direction.ASC) Pageable pageable,
 			Model model) {
 		

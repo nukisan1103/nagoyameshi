@@ -24,16 +24,31 @@
 						<h1 class="mb-4 text-center">店舗一覧</h1>
 
 						<div class="d-flex justify-content-between align-items-end flex-wrap">
-							<form method="get" th:action="@{/admin/restaurants}" class="mb-3">
+							<form method="get" th:action="@{/restaurants/subscriber}" class="mb-3">
 								<div class="input-group">
 									<input type="text" class="form-control" name="keyword" th:value="${keyword}"
 										placeholder="店舗名">
 									<button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button>
 								</div>
 							</form>
+						</div>
+
+						<div class="d-flex justify-content-between align-items-end flex-wrap">
+							<form method="get" th:action="@{/restaurants/subscriber/categorySearch}" class="mb-3">
+						<div class="d-flex justify-content-between align-items-end flex-wrap">
+							<div class="form-group mb-3">
 						
+                        	<select class="form-control" name="category"th:value="*{category_name}">
+										<option th:each="category : ${categories}" th:value="${category.getCategory()}"
+											th:text="${category.getCategory()}"></option>
+									</select>
+									<button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button>
+							</div>
 							
 						</div>
+						</form>
+						</div>
+
 						<div th:if="${successMessage}" class="alert alert-info">
 							<span th:text="${successMessage}"></span>
 						</div>
@@ -43,48 +58,20 @@
 								<tr>
 									<th scope="col">ID</th>
 									<th scope="col">店舗名</th>
+									<th scope="col">カテゴリー名</th>
 									<th scope="col">住所</th>
 									<th scope="col">電話番号</th>
 									<th scope="col"></th>
-									<th  sec:authorize="hasRole('ROLE_ADMIN')" scope="col"></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="restaurants : ${restaurants}">
 									<td th:text="${restaurants.getId()}"></td>
 									<td th:text="${restaurants.getName()}"></td>
+									<td th:text="${restaurants.getCategoryName()}"></td>
 									<td th:text="${restaurants.getAddress()}"></td>
 									<td th:text="${restaurants.getPhone_number()}"></td>
 									<td><a th:href="@{/restaurants/subscriber/__${restaurants.getId()}__}">詳細</a> </td>
-									<td  sec:authorize="hasRole('ROLE_ADMIN')" ><a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal"
-											th:data-bs-target="${'#deleterestaurantModal' + restaurants.getId()}">削除</a>
-									</td>
-
-
-									<!--reviesテーブルの外部キーがrestaurantテーブルのIDを参照しているので消せない？-->
-									<!-- 削除用モーダル -->
-									<div class="modal fade" th:id="${'deleterestaurantModal' + restaurants.getId()}"
-										tabindex="-1"
-										th:aria-labelledby="${'deleterestaurantModalLabel' + restaurants.getId()}">
-										<div class="modal-dialog">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h5 class="modal-title"
-														th:id="${'deleterestaurantModalLabel' + restaurants.getId()}"
-														th:text="${restaurants.getName() + 'を削除してもよろしいですか？'}"></h5>
-													<button type="button" class="btn-close" data-bs-dismiss="modal"
-														aria-label="閉じる"></button>
-												</div>
-												<div class="modal-footer">
-													<form method="post"
-														th:action="@{/admin/restaurants/__${restaurants.getId()}__/delete}">
-														<button type="submit"
-															class="btn nagoyameshi-btn-danger text-white shadow-sm">削除</button>
-													</form>
-												</div>
-											</div>
-										</div>
-									</div>
 								</tr>
 								</tr>
 							</tbody>
@@ -96,7 +83,7 @@
 									<li class="page-item">
 										<span th:if="${restaurants.isFirst()}" class="page-link disabled">前</span>
 										<a th:unless="${restaurants.isFirst()}"
-											th:href="@{/admin/restaurants(page = ${restaurants.getNumber() - 1}, keyword = ${keyword})}"
+											th:href="@{/restaurants/subscriber(page = ${restaurants.getNumber() - 1}, keyword = ${keyword})}"
 											class="page-link nagoyameshi-page-link">前</a>
 									</li>
 									<li th:each="i : ${#numbers.sequence(0, restaurants.getTotalPages() - 1)}"
@@ -104,13 +91,13 @@
 										<span th:if="${i == restaurants.getNumber()}"
 											class="page-link active nagoyameshi-active" th:text="${i + 1}"></span>
 										<a th:unless="${i == restaurants.getNumber()}"
-											th:href="@{/admin/restaurants(page = ${i}, keyword = ${keyword})}"
+											th:href="@{/restaurants/subscriber(page = ${i}, keyword = ${keyword})}"
 											class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>
 									</li>
 									<li class="page-item">
 										<span th:if="${restaurants.isLast()}" class="page-link disabled">次</span>
 										<a th:unless="${restaurants.isLast()}"
-											th:href="@{/admin/restaurants(page = ${restaurants.getNumber() + 1}, keyword = ${keyword})}"
+											th:href="@{/restaurants/subscriber(page = ${restaurants.getNumber() + 1}, keyword = ${keyword})}"
 											class="page-link nagoyameshi-page-link">次</a>
 									</li>
 								</ul>

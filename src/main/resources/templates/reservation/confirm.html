@@ -29,7 +29,9 @@
 						</nav>
 
 						<h1 class="mb-4 text-center">予約内容確認</h1>
-
+						<div th:if="${attention}" class="alert alert-info">
+							<span th:text="${attention}"></span>
+						</div>
 						<form method="post" th:action="@{/restaurants/__${restaurants.getId()}__/reservations/create}"
 							th:object="${reservationRegisterForm}">
 							<input type="hidden" th:field="*{restaurantId}">
