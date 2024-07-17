@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.nagoyamesi.entity.Restaurant;
 import com.example.nagoyamesi.entity.Review;
 import com.example.nagoyamesi.entity.User;
+import com.example.nagoyamesi.form.ReviewEditForm;
 import com.example.nagoyamesi.form.ReviewForm;
 import com.example.nagoyamesi.repository.RestaurantRepository;
 import com.example.nagoyamesi.repository.ReviewRepository;
@@ -29,15 +30,15 @@ import com.example.nagoyamesi.service.ReviewService;
 public class ReviewController {
 	
  private final ReviewRepository reviewRepository;      
- private final ReviewService reviewservice;
+ private final ReviewService reviewService;
  private final UserRepository userRepository;
  private final RestaurantRepository restaurantRepository;
 
      
-     public ReviewController(ReviewRepository reviewRepository,ReviewService reviewservice,UserRepository userRepository
+     public ReviewController(ReviewRepository reviewRepository,ReviewService reviewService,UserRepository userRepository
     		 ,RestaurantRepository restaurantRepository) {        
          this.reviewRepository = reviewRepository;        
-         this.reviewservice = reviewservice;
+         this.reviewService = reviewService;
          this.userRepository = userRepository;
          this.restaurantRepository = restaurantRepository;
         
@@ -55,9 +56,17 @@ public class ReviewController {
      
      //レビュー投稿ページへ
      @GetMapping("/{id}/review")
-     public String postReview(@PathVariable(name = "id") Integer id,Model model) {
-    	 
+     public String postReview(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+    		 @PathVariable(name = "id") Integer id,Model model,RedirectAttributes redirectAttributes) {
+    	 User user = userDetailsImpl.getUser();
     	 Restaurant restaurants = restaurantRepository.getReferenceById(id);
+    	 Review review = reviewRepository.findByUserAndRestaurant(user, restaurants);
+    	 
+    	 if(review != null) {
+    		 redirectAttributes.addFlashAttribute("errorMessage", "レビューはひとつの店舗に1回までです。再度投稿する場合は、前回のレビューを削除、または編集してください。");
+    		 return "redirect:/review";
+    	 }
+    	 
     	 model.addAttribute("restaurants",restaurants);
     	 model.addAttribute("reviewForm", new ReviewForm());
          return "review/post";
@@ -96,19 +105,51 @@ public class ReviewController {
     	 User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId()); 
     	 Restaurant restaurants = restaurantRepository.getReferenceById(id);
     	 
-    	 reviewservice.create(user,restaurants,reviewForm);
+    	 reviewService.create(user,restaurants,reviewForm);
     	 redirectAttributes.addFlashAttribute("successMessage", "レビューを登録しました。");   
     	 
     	 return "redirect:/restaurants/subscriber";
      }
      
-     //レビュー削除用
+   //レビュー編集用
      @GetMapping("/{id}/review/delete")
-     public String reviewDelete(@PathVariable(name = "id") Integer id,Model model,RedirectAttributes redirectAttributes) {
-    	   	
-    	 reviewRepository.deleteById(id);
+     public String reviewDelete(@PathVariable(name = "id") Integer id,Model model
+    		 ,RedirectAttributes redirectAttributes) {
+    	 
+    	 reviewService.geleteReview(id);
     	 
     	 redirectAttributes.addFlashAttribute("successMessage", "レビューを削除しました。");   
+  	 
+    	 return "redirect:/review";
+    	 
+     }
+     
+     //レビュー編集用
+     @GetMapping("/{id}/review/edit")
+     public String reviewEdit(@PathVariable(name = "id") Integer id,Model model) {
+    	 
+    	 Review review = reviewRepository.getReferenceById(id);
+    	 ReviewEditForm reviewEditForm  = new  ReviewEditForm(review.getScore(),review.getSentense());
+    	 
+    	 model.addAttribute("reviewEditForm",reviewEditForm);
+    	 model.addAttribute("reviewId",review);
+    	 
+    	 return "review/edit";
+    	 
+     }
+     
+     //レビュー編集登録用
+     @PostMapping("/{id}/review/update")
+     public String reviewUpdate(@PathVariable(name = "id") Integer id,Model model,
+    		 @ModelAttribute @Validated ReviewEditForm reviewEditForm,
+    		 RedirectAttributes redirectAttributes,BindingResult bindingResult) {
+    	 
+    	 if (bindingResult.hasErrors()) {
+ 			return "review/edit";
+ 		}
+    	 
+    	 reviewService.update(id,reviewEditForm);
+    	 redirectAttributes.addFlashAttribute("successMessage", "レビューを更新しました。");   
     	 
     	 return "redirect:/review";
     	 

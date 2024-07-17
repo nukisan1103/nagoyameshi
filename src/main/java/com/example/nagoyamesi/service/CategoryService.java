@@ -16,7 +16,7 @@ public class CategoryService {
 		this.categoryRepository = categoryRepository;
 	}
 
-	@Transactional
+	@Transactional //カテゴリ新規登録用
 	public void create(CategoryRegisterForm categoryRegisterForm) {
 		
 		Category category = new Category();		
@@ -24,6 +24,12 @@ public class CategoryService {
 		category.setCategory(categoryRegisterForm.getCategory_name());
 		
 		categoryRepository.save(category);
+	}
+	
+	//カテゴリ削除用
+	public void deleteCategory(int category) {
+		categoryRepository.deleteById(category);
+		
 	}
 
 

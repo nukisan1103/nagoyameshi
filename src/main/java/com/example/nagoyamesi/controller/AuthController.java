@@ -1,5 +1,6 @@
 package com.example.nagoyamesi.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import com.example.nagoyamesi.form.PasswordResetInputForm;
 import com.example.nagoyamesi.form.SignupForm;
 import com.example.nagoyamesi.repository.UserRepository;
 import com.example.nagoyamesi.repository.VerificationTokenRepository;
+import com.example.nagoyamesi.security.UserDetailsImpl;
 import com.example.nagoyamesi.service.PassResetTokenService;
 import com.example.nagoyamesi.service.UserService;
 import com.example.nagoyamesi.service.VerificationTokenService;
@@ -181,4 +183,23 @@ public class AuthController {
 
        return "redirect:/";
    }
+    
+    @GetMapping("/withdrawal")
+    public String withdrawal() {        
+       
+        return "auth/withdrawal";
+    }  
+    
+    
+    @GetMapping("/withdrawal/complete")
+    public String withdrawalComplete(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl
+    		,RedirectAttributes redirectAttributes) {        
+    	
+    	User user = userDetailsImpl.getUser();
+    	userService.withdrawal(user);
+    	
+    	redirectAttributes.addFlashAttribute("successMessage", "退会完了しました。再度会員登録する場合は、一旦ログアウトしてください。");
+       
+        return "redirect:/login";
+    }  
 }

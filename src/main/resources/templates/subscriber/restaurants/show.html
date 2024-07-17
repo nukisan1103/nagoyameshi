@@ -28,24 +28,29 @@
 						</nav>
 
 						<h1 class="mb-4 text-center" th:text="${restaurants.getName()}"></h1>
-						
+
 						<div th:if="${successMessage}" class="alert alert-info">
 							<span th:text="${successMessage}"></span>
 						</div>
 						<div th:if="${errorMessage}" class="alert alert-danger">
 							<span th:text="${errorMessage}"></span>
 						</div>
-						
-						<div class="d-flex justify-content-end align-items-end mb-3">
-							<a th:href="@{favorite/__${restaurants.getId()}__/regist}">お気に入り登録</a>
-							<a th:href="@{/__${restaurants.getId()}__/review/show}">全てのレビューを閲覧する</a>
 
-						</div>
 						<div class="d-flex justify-content-end align-items-end mb-3">
-							<a th:href="@{/__${restaurants.getId()}__/review}">レビューを投稿する</a>
+							<div class="container">
+								<div class="row">
+									<div class="col-5">
+										<a th:href="@{favorite/__${restaurants.getId()}__/regist}">お気に入り登録</a>
+									</div>
+									<div class="col-2"></div>
+									<div class="col">
+										<a th:href="@{/__${restaurants.getId()}__/review/show}"> 全てのレビューを閲覧する</a>
+										<br>	<a th:href="@{/__${restaurants.getId()}__/review}">レビューを投稿する</a>
+									</div>
+								
+								</div>
+							</div>
 						</div>
-
-						
 
 
 						<div class="mb-3">
@@ -152,7 +157,7 @@
 								</div>
 
 
-								<div class="col-lg-4 px-0 ps-lg-4 mb-4">
+								<div sec:authorize="hasRole('ROLE_SUBSCRIBER')"class="col-lg-4 px-0 ps-lg-4 mb-4">
 									<h4>予約フォーム</h4>
 									<div class="card">
 										<div class="card-body">
@@ -200,9 +205,6 @@
 								</div>
 							</div>
 						</div>
-
-
-
 					</div>
 				</div>
 			</div>

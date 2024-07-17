@@ -49,13 +49,14 @@ public class ReservationService {
 	public boolean isWithinCapacity(Integer numberOfPeople, Integer capacity) {
 		return numberOfPeople <= capacity;
 	}
-
+	
+	//ユーザーが入力した日付が入力日よりも前かどうかチェック
 	public boolean dateCheck(LocalDate mydate, LocalDate today) {
-		//ユーザーが入力した日付が入力日よりも前だったらfalse
+		
 		return mydate.isAfter(today);
 
 	}
-
+	////ユーザーが入力した時刻が現時刻よりも前だったらfalse
 	public boolean timeCheck(LocalTime mytime, LocalTime nowtime) {
 		return mytime.isAfter(nowtime);
 
@@ -66,11 +67,13 @@ public class ReservationService {
 		return mytime.isAfter(twoHoursLater);
 
 	}
-
+	
+	//ユーザーが入力した日付が、当日かどうかチェック
 	public boolean isSameDate(LocalDate date1, LocalDate date2) {
 		return date1 != null && date1.equals(date2);
 	}
 
+	//ユーザーが指定した予約時間に、満席かどうかを判定
 	public boolean capaCheck(List<Reservation> timeSearch, int numberOfPeople, int capacity) {
 		int capaCheck = numberOfPeople;
 		for (int i = 0; i < timeSearch.size(); i++) {
@@ -81,5 +84,17 @@ public class ReservationService {
 		}
 		return true;
 
+	}
+
+	//ユーザーが入力した時刻が店舗の営業時間前かを判定。
+	public boolean isBeforeOpen(LocalTime openindTime, LocalTime mytime) {
+		
+		return openindTime.isBefore(mytime);
+		
+	}
+	//ユーザーが入力した時刻が店舗の営業時間後かを判定。
+	public boolean isAfterOpen(LocalTime closindTime, LocalTime mytime) {
+		// TODO 自動生成されたメソッド・スタブ
+		return closindTime.isAfter(mytime);
 	}
 }

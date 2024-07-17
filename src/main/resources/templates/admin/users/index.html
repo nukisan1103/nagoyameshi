@@ -17,9 +17,9 @@
 		<main>
 			<div class="container pt-4 pb-5 nagoyameshi-container">
 				<div class="row justify-content-center">
-					<div class="col-xxl-9 col-xl-10 col-lg-11">
+					<div class="col-xxl-12 col-xl-10 col-lg-9">
 
-						<h1 class="mb-4 text-center">会員一覧</h1>
+						<h1 class="mb-4 text-center">会員一覧</h1><hr class="hr1"><br>
 						
 
 						<div class="d-flex justify-content-between align-items-end">
@@ -32,10 +32,9 @@
 							</form><br>
 							<form method="get" th:action="@{/admin/users/roleresearch}" class="mb-3">
 								<div class="col-md-13">
-										<button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button>
-
-									<select class="form-control" name="keyword" th:value="${keyword}">
-										<option value="">会員ロール選択</option>
+										
+									<select class="form-control" name="keyword" th:value="${keyword}"onchange="submit(this.form)">
+										<option value="" disabled selected>--ロールから検索--</option>
 										<option value="ROLE_GENERAL">無料会員</option>
 										<option value="ROLE_SUBSCRIBER">有料会員</option>
 									</select>

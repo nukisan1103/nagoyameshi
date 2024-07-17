@@ -11,5 +11,7 @@ public interface VerificationTokenRepository extends JpaRepository< Verification
 
 	public VerificationToken findByUser(User user);
 
+	public void deleteByUser(User user);
+
 
 }

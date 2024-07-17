@@ -33,12 +33,16 @@
 						<div th:if="${successMessage}" class="alert alert-info">
 							<span th:text="${successMessage}"></span>
 						</div>
+						<div th:if="${errorMessage}" class="alert alert-danger">
+							<span th:text="${errorMessage}"></span>
+						</div>
+						<hr class="hr1">
 						<table class="table">
 							<thead>
 								<tr>
 									<th scope="col">店舗名</th>
 									<th scope="col">レビュー内容</th>
-									<th scope="col">スコア</th>
+									<th scope="col"></th>
 									<th scope="col"></th>
 
 								</tr>
@@ -50,7 +54,8 @@
 											th:text="${review.getRestaurant().getName()}"></a>											
 									</td>
 									<td th:text="${review.getSentense()}"></td>
-									<td th:text="${review.getScore()}"></td>
+									<td><a th:href="@{/__${review.getId()}__/review/edit}">編集</a>
+									</td>
 									<td>
 										<a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal"
 											th:data-bs-target="${'#deleterestaurantModal' + review.getId()}">削除</a>

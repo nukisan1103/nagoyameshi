@@ -81,7 +81,9 @@ public class ReservationController {
 
 		//ログインユーザーの情報取得		
 		User user = userDetailsImpl.getUser();
-	
+		LocalTime openindTime = LocalTime.parse(restaurant.getOpening_time());
+		LocalTime closindTime = LocalTime.parse(restaurant.getClosing_time());
+		
 	
 		//----------自分が既に希望店舗に予約しているかどうかを確認---------------
 		Reservation alreadyCheck = reservationRepository.findByUserAndRestaurant(user,restaurant);
@@ -135,11 +137,20 @@ public class ReservationController {
 					bindingResult.addError(fieldError);
 				}
 			}
-			//予約希望時間が過去日且つ、予約指定時間から二時間以内であればそれぞれエラー文を返す。
+			//予約希望時間が過去日であればそれぞれエラー文を返す。
 			if (mytime != null && !(mytime.equals(nowtime))) {
 				if (!reservationService.timeCheck(mytime, nowtime) && !reservationService.dateCheck(mydate, nowdate)) {
 					FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationTime",
 							"過去の時間は選択出来ません。");
+					bindingResult.addError(fieldError);
+				}
+			if (!(mytime.equals(openindTime)) && !reservationService.isBeforeOpen(openindTime,mytime)) {
+				FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationTime",
+						"営業時間外です。");
+				bindingResult.addError(fieldError);
+				}if(!(mytime.equals(openindTime)) && !reservationService.isAfterOpen(closindTime,mytime)) {
+					FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationTime",
+							"営業時間外です。");
 					bindingResult.addError(fieldError);
 				}
 				//				}if (!(reservationService.twoHoursLaterCheck(mytime, twoHoursLater))) {

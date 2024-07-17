@@ -44,7 +44,6 @@ public class FavoriteController {
      public String getFavoriteRestaurants(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,Model model) {
     	 int userData = userDetailsImpl.getUser().getId();   
       List<Restaurant> favoriteRestaurantList =  favoriteService.getFavoriteRestaurantsByUserId(userData);
-      int s = favoriteRestaurantList.get(0).getId();
       
       model.addAttribute("favoriteRestaurantList", favoriteRestaurantList);
       

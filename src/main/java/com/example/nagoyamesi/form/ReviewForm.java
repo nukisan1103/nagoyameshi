@@ -9,16 +9,12 @@ import lombok.Data;
 @Data
 public class ReviewForm {
 	
-	
-
-	
     @NotNull(message = "スコアを入力してください。")
     private Integer score;
 
     @NotBlank(message = "レビュー内容を入力してください。")
     @Length(max = 300, message = "レビューは300文字以内で入力してください。")
     private String sentense;
-
-   
+ 
 }
 

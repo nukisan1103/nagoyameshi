@@ -34,7 +34,7 @@ public class PassResetEventListener {
 	        String recipientAddress = userMail.getEmail();
 	        String subject = "メール認証";
 	        String confirmationUrl = passResetEvent.getRequestUrl() + "/passreset?token=" + token;
-	        String message = "以下のリンクをクリックして会員登録を完了してください。";
+	        String message = "以下のリンクをクリックしてパスワードリセットを完了してください。";
 	       
 	        SimpleMailMessage mailMessage = new SimpleMailMessage(); 
 	        mailMessage.setTo(recipientAddress);

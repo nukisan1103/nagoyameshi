@@ -12,6 +12,7 @@ import com.example.nagoyamesi.entity.Restaurant;
 
 
  public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
+	 
 	 public Page<Restaurant> findByNameLike(String keyword, Pageable pageable);
 
 
@@ -28,7 +29,6 @@ import com.example.nagoyamesi.entity.Restaurant;
 
 
 	public List<Restaurant> findByNameAndId(String name, int userData);
-
-
-
+	
+	
  }

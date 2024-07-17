@@ -88,20 +88,19 @@
 
 				<div class="container">
 					<div class="row">
-						<div class="col-md-2" th:each="review : ${topReviews}">
-
-							<img th:if="${review.getRestaurant().getImage_name()}"
-								th:src="@{/storage/__${review.getRestaurant().getImage_name()}__}" class="w-100"
-								alt="店舗画像">
-							<img th:unless="${review.getRestaurant().getImage_name()}" th:src="@{/images/noImage.png}"
+						<!--上位六位までを#numbers.sequenceで表示-->
+						<div class="col-md-2" th:each="	i : ${#numbers.sequence(1,6)}">
+							<img th:if="${scoreSort[i-1].key.restaurant.image_name}"
+								th:src="@{/storage/__${scoreSort[i-1].key.restaurant.image_name}__}" class="w-100" alt="店舗画像">
+							<img th:unless="${scoreSort[i-1].key.restaurant.image_name}" th:src="@{/images/noImage.png}"
 								class="w-100" alt="NO IMAGE">
 							<div class="row pb-2 mb-2 border-bottom">
 								<div class="col-4">
 									<span class="fw-bold">店舗名</span>
 								</div>
 								<div class="col">
-									<a th:href="@{/top/__${review.getRestaurant().getName()}__}"
-										th:text="${review.getRestaurant().getName()}"></a>
+									<a th:href="@{/top/__${scoreSort[i-1].key.restaurant.name}__}"
+										th:text="${scoreSort[i-1].key.restaurant.name}"></a>
 								</div>
 							</div>
 							<div class="row pb-2 mb-2 border-bottom">
@@ -109,17 +108,10 @@
 									<span class="fw-bold">説明</span>
 								</div>
 								<div class="col">
-									<span th:text="${review.getRestaurant().getDescription()}"></span>
+									<span th:text="${scoreSort[i-1].key.restaurant.description}"></span>
 								</div>
 							</div>
-							<div class="row pb-2 mb-2 border-bottom">
-								<div class="col-4">
-									<span class="fw-bold">点数</span>
-								</div>
-								<div class="col">
-									<span th:text="${review.getScore()}"></span>
-								</div>
-							</div>
+
 						</div>
 					</div>
 				</div>
@@ -160,24 +152,24 @@
 						</div>
 					</div>
 				</div>
-				
-					<br><br><br>
+
+				<br><br><br>
 				<hr class="hr1"><!--横線-->
 
-<div class="font">
+				<div class="font">
 					<h4>カテゴリー</h4>
 				</div>
-<br><br><br>
-			
+				<br><br><br>
+
 				<div class="container">
 					<div class="row">
-						<div class="col-md-2" th:each="categories : ${categories}">							
-							<div class="row pb-2 mb-2 border-bottom">								
+						<div class="col-md-2" th:each="categories : ${categories}">
+							<div class="row pb-2 mb-2 border-bottom">
 								<div class="col">
 									<a th:href="@{/top/category/__${categories.getCategory()}__}"
 										th:text="${categories.getCategory()}"></a>
 								</div>
-							</div>						
+							</div>
 						</div>
 					</div>
 				</div>

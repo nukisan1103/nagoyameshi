@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyamesi.entity.User;
-import com.example.nagoyamesi.form.PaidRegistForm;
-import com.example.nagoyamesi.form.PaidRegistInputForm;
 import com.example.nagoyamesi.form.UserEditForm;
 import com.example.nagoyamesi.repository.UserRepository;
 import com.example.nagoyamesi.security.UserDetailsImpl;
@@ -72,33 +70,26 @@ public class UserController {
         
         return "redirect:/user";
     }    
-    @GetMapping("/paidregistration")
-    public String paidRegistration(Model model) {         
+    @GetMapping("/upgrade")
+    public String upgrade(Model model,HttpServletRequest httpServletRequest) {         
        
-        model.addAttribute("paidRegistInputForm", new PaidRegistInputForm());
-        
-        return "user/paidregist";
+    	String sessionId = stripeService.createStripeSession(httpServletRequest);
+    	
+   	 model.addAttribute("sessionId", sessionId);
+   	 return "user/confirm";
     }
-    @PostMapping("/upgradeConfirm")
-    public String upgradeConfirm(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
-    		@ModelAttribute PaidRegistInputForm paidRegistInputForm
-    		,Model model, HttpServletRequest httpServletRequest) {         
+    
+    @GetMapping("/upgradeExecution")
+    public String upgradeExecution(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl
+    		,RedirectAttributes redirectAttributes) {         
     	
     	User user = userDetailsImpl.getUser();
     	
-    	PaidRegistForm paidRegistForm = new PaidRegistForm(user.getId(),paidRegistInputForm.getNominee(),paidRegistInputForm.getCard_number()
-    			,paidRegistInputForm.getSec_number(),paidRegistInputForm.getCard_type(),paidRegistInputForm.getPeriod_year()
-    			,paidRegistInputForm.getPeriod_month());
+    	userService.upgrade(user);
     	
-    	 String sessionId = stripeService.createStripeSession(paidRegistForm, httpServletRequest);
-    	 
-    	   // セッションIDをログに出力
-    	    System.out.println("Generated sessionId: " + sessionId);
-
-    	
-    	 model.addAttribute("paidRegistForm", paidRegistForm);
-    	 model.addAttribute("sessionId", sessionId);
-    	 return "user/paidconfirm";
+    	redirectAttributes.addFlashAttribute("successMessage", "有料会員にアップグレードしました。有料会員としてログインする場合は一旦ログアウトしてください。");
+    	  
+    	 return "redirect:/login";
     	     
     }
 }

@@ -17,21 +17,11 @@
 		<div th:replace="~{fragment :: header}"></div>
 
 		<main>
-			<div class="container pt-4 pb-5 nagoyameshi-container">
-				<div th:if="${param.loggedIn}" class="alert alert-info">
-					ログインしました。
-				</div>
 
-				<div th:if="${param.loggedOut}" class="alert alert-info">
-					ログアウトしました。
-				</div>
-				<div th:if="${successMessage}">
-					<span th:text="${successMessage}"></span>
-				</div>
-			</div>
 			<a class="nav-link" th:href="@{/}">
-			<div class="container pt-2 pb-5 nagoyameshi-container text-primary">Topへ戻る</div></a>
-			
+				<div class="container pt-2 pb-5 mt-5 nagoyameshi-container text-primary">Topへ戻る</div>
+			</a>
+
 			<hr class="hr1">
 			<!--店舗検索-->
 			<div class="container pt-4 pb-5 nagoyameshi-container">
@@ -49,22 +39,25 @@
 				</div><br>
 				<hr class="hr1">
 
-				
+
 				<!--  新着順に表示する  -->
 				<div class="font">
 					<h4>検索結果</h4>
 				</div><br><br>
 
-						<div th:if="${errorMessage}" class="alert alert-danger">
-							<span th:text="${errorMessage}"></span>
-						</div>
+				<div th:if="${errorMessage}" class="alert alert-danger">
+					<span th:text="${errorMessage}"></span>
+				</div>
 				<div class="container">
-					<div class="row">
-						<div class="col-md-2" th:each="restaurants : ${restaurants}">
+					<div class="row" th:each="restaurants : ${restaurants}">
+
+						<div class="col-6 mb-3">
 							<img th:if="${restaurants.getName()}"
 								th:src="@{/storage/__${restaurants.getImage_name()}__}" class="w-100" alt="店舗画像">
 							<img th:unless="${restaurants.getImage_name()}" th:src="@{/images/noImage.png}"
 								class="w-100" alt="NO IMAGE">
+						</div>
+						<div class="col-6">
 							<div class="row pb-2 mb-2 border-bottom">
 								<div class="col-4">
 									<span class="fw-bold">店舗名</span>
@@ -82,7 +75,56 @@
 									<span th:text="${restaurants.getDescription()}"></span>
 								</div>
 							</div>
-						</div>
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-4">
+									<span class="fw-bold">カテゴリー</span>
+								</div>
+								<div class="col">
+									<span th:text="${restaurants.getCategoryName()}"></span>
+								</div>
+							</div>
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-4">
+									<span class="fw-bold">営業時間</span>
+								</div>
+								<div class="col">
+									<span th:text="${restaurants.getOpening_time()} + '~' + ${restaurants.getClosing_time()}"></span>
+								</div>
+							</div>
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-4">
+									<span class="fw-bold">定員</span>
+								</div>
+								<div class="col">
+									<span th:text="${restaurants.getCapacity() + '人'}"></span>
+								</div>
+							</div>
+							
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-4">
+									<span class="fw-bold">定員</span>
+								</div>
+								<div class="col">
+									<span th:text="${restaurants.getRegular_holiday()}"></span>
+								</div>
+							</div>
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-4">
+									<span class="fw-bold">住所</span>
+								</div>
+								<div class="col">
+									<span th:text="${restaurants.getAddress()}"></span>
+								</div>
+							</div>
+							<div class="row pb-2 mb-2 border-bottom">
+								<div class="col-4">
+									<span class="fw-bold">電話番号</span>
+								</div>
+								<div class="col">
+									<span th:text="${restaurants.getPhone_number()}"></span>
+								</div>
+							</div>
+						</div><hr class="hr1">
 					</div>
 				</div>
 

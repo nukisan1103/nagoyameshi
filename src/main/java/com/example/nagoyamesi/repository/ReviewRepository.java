@@ -11,14 +11,21 @@ import com.example.nagoyamesi.entity.Review;
 import com.example.nagoyamesi.entity.User;
 
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
+	
 	 public Page<Review> findByUserOrderByCreatedAtDesc(User user, Pageable pageable);
+	 
 	 public Page<Review> findByRestaurant(Restaurant restaurant,Pageable pageable);
 	 
-	public Review deleteByRestaurant(Restaurant restaurant);
-	
-	
+	public void deleteByRestaurant(Restaurant restaurant);
+		
 	public List<Review> findTop6AllByOrderByScoreDesc();
 	
+	public void deleteByUser(User user);
 
+	public List<Review> findByRestaurant(Restaurant s);
+
+	public Review findByUserAndRestaurant(User user, Restaurant restaurants);
+	
+	
 	}
 

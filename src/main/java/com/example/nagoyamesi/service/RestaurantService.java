@@ -6,8 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,14 +13,22 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.nagoyamesi.entity.Restaurant;
 import com.example.nagoyamesi.form.RestaurantEditForm;
 import com.example.nagoyamesi.form.RestaurantRegisterForm;
+import com.example.nagoyamesi.repository.ReservationRepository;
 import com.example.nagoyamesi.repository.RestaurantRepository;
+import com.example.nagoyamesi.repository.ReviewRepository;
 
 @Service
 public class RestaurantService {
 	private final RestaurantRepository restaurantRepository;
+	private final ReviewRepository reviewRepository;
+	private final ReservationRepository reservationRepository;
 
-	public RestaurantService(RestaurantRepository restaurantRepository) {
+	public RestaurantService(RestaurantRepository restaurantRepository
+			,ReviewRepository reviewRepository,ReservationRepository reservationRepository) {
 		this.restaurantRepository = restaurantRepository;
+		this.reviewRepository = reviewRepository;
+		this.reservationRepository = reservationRepository;
+		
 	}
 
 	@Transactional
@@ -98,36 +104,16 @@ public class RestaurantService {
 			e.printStackTrace();
 		}
 	}
-
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
 	
-	//店舗削除機能実装につき一旦外部キー制約削除
-	public void dropForeignKey() {
-		String reviewsql = "ALTER TABLE reviews DROP FOREIGN KEY reviews_ibfk_2";
-		String reservationsql = "ALTER TABLE reservations DROP FOREIGN KEY reservations_ibfk_1";
-
-
-		jdbcTemplate.execute(reviewsql);
-		jdbcTemplate.execute(reservationsql);
+	@Transactional //店舗削除処理
+	public void deleteRestaurant(Restaurant restaurant) {
 		
-		}
-	
-	//店舗削除成功後、再度外部キー制約作成
-	public void createForeignKey() {
-		String reviewsql = " ALTER TABLE reviews ADD CONSTRAINT reviews_ibfk_2\n"
-				+ "FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id)\n"
-				+ "ON DELETE CASCADE;";
+		reservationRepository.deleteByRestaurant(restaurant);
 		
-		String reservationsql = " ALTER TABLE reservations ADD CONSTRAINT reservations_ibfk_1\n"
-				+ "FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id)\n"
-				+ "ON DELETE CASCADE;";
+		reviewRepository.deleteByRestaurant(restaurant);
 		
-		jdbcTemplate.execute(reviewsql);
-		jdbcTemplate.execute(reservationsql);
-	
-		
+		restaurantRepository.deleteById(restaurant.getId());
+				
 	}
-}
-	
 
+}

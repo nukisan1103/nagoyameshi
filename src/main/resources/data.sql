@@ -24,6 +24,8 @@ INSERT IGNORE INTO categories (id, category_name) VALUES (6, 'ひつまぶし');
 INSERT IGNORE INTO categories (id, category_name) VALUES (7, 'うどん');
 INSERT IGNORE INTO categories (id, category_name) VALUES (8, '喫茶店');
 INSERT IGNORE INTO categories (id, category_name) VALUES (9, '郷土料理');
+INSERT IGNORE INTO categories (id, category_name) VALUES (10, 'とんかつ');
+
 
 
 --reviewsテーブル--
@@ -72,8 +74,7 @@ INSERT IGNORE INTO reservations (id, restaurant_id, user_id, reservation_datetim
 INSERT IGNORE INTO reservations (id, restaurant_id, user_id, reservation_datetime, reservation_time, number_of_people) VALUES (11, 11, 1, '2023-04-01', '11:00', 2);
 INSERT IGNORE INTO reservations (id, restaurant_id, user_id, reservation_datetime, reservation_time, number_of_people) VALUES (12, 12, 6, '2023-04-01', '11:00', 2);
 
---method_of_paymentテーブル--
-INSERT IGNORE INTO method_of_payment (id, user_id,nominee,card_number,sec_number,card_type,period_year,period_month) VALUES (1, 10,'hatiro','3333-3333-3333','234','VISA','2024','09');
+
 
 
 

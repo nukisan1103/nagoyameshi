@@ -70,20 +70,6 @@ CREATE TABLE IF NOT EXISTS verification_tokens (
      FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id),
      FOREIGN KEY (user_id) REFERENCES users (id)
  );
-  
- CREATE TABLE IF NOT EXISTS method_of_payment (
-     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-     user_id INT NOT NULL,
-     nominee VARCHAR(255) NOT NULL,  
-     card_number VARCHAR(255) NOT NULL,
-     sec_number VARCHAR(255) NOT NULL,
-     card_type VARCHAR(50) NOT NULL,
-     period_year VARCHAR(50) NOT NULL,
-     period_month VARCHAR(50) NOT NULL,
-     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     FOREIGN KEY (user_id) REFERENCES users (id)
- );
 
 
 CREATE TABLE IF NOT EXISTS categories(
