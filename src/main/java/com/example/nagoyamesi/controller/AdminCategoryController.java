@@ -33,7 +33,8 @@ public class AdminCategoryController {
 		this.categoryService = categoryService;
 
 	}
-
+	
+	//管理者用カテゴリ一覧ページへ
 	@GetMapping("/index")
 	public String index(Model model) {
 
@@ -44,6 +45,8 @@ public class AdminCategoryController {
 
 		return "admin/category/index";
 	}
+	
+	//管理者用カテゴリ削除
 	@PostMapping("/{id}/delete")
 	public String delete(@PathVariable(name = "id") int id, RedirectAttributes redirectAttributes, Model model) {
 
@@ -72,7 +75,7 @@ public class AdminCategoryController {
 			String getCategory = categoryRegisterForm.getCategory_name();
 			Category categoryCheck = categoryRepository.findByCategory(getCategory);
 
-			if (categoryCheck != null) {
+			if (categoryCheck != null) { //入力されたカテゴリ名が既存だった場合はエラーを返す
 				FieldError fieldError = new FieldError(bindingResult.getObjectName(), "category_name",
 						"そのカテゴリーは既に登録されています。");
 				bindingResult.addError(fieldError);

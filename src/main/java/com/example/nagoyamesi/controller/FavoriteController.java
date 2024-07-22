@@ -15,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.nagoyamesi.entity.Restaurant;
-import com.example.nagoyamesi.repository.FavoriteRepository;
 import com.example.nagoyamesi.repository.RestaurantRepository;
 import com.example.nagoyamesi.security.UserDetailsImpl;
 import com.example.nagoyamesi.service.FavoriteService;
@@ -27,17 +26,15 @@ import jakarta.transaction.Transactional;
 public class FavoriteController {
 	
  private final RestaurantRepository restaurantRepository;
- private final FavoriteRepository favoriteRepository;
+
  private final FavoriteService favoriteService;
 
      
-     public FavoriteController(RestaurantRepository restaurantRepository,FavoriteService favoriteService
-    		 ,FavoriteRepository favoriteRepository) {        
+     public FavoriteController(RestaurantRepository restaurantRepository,FavoriteService favoriteService) {        
          
          this.restaurantRepository = restaurantRepository;
          this.favoriteService = favoriteService;
-         this.favoriteRepository = favoriteRepository;
-        
+       
      }    
 
      @GetMapping("/index")

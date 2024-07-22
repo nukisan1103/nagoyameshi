@@ -1,6 +1,7 @@
 package com.example.nagoyamesi.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,6 +46,9 @@ public class User {
 
     @Column(name = "enabled")
     private Boolean enabled;
+    
+    @Column(name = "subscription_start_date")
+    private LocalDate subscriptionStartDate;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private Timestamp createdAt;

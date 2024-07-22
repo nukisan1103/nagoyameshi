@@ -18,9 +18,16 @@
 			<div class="container pt-4 pb-5 nagoyameshi-container">
 				<div class="row justify-content-center">
 					<div class="col-xxl-12 col-xl-10 col-lg-9">
+						<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item"><a th:href="@{/admin/restaurants}">店舗一覧</a></li>
 
-						<h1 class="mb-4 text-center">会員一覧</h1><hr class="hr1"><br>
-						
+								<li class="breadcrumb-item active" aria-current="page">会員一覧</li>
+							</ol>
+						</nav>
+						<h1 class="mb-4 text-center">会員一覧</h1>
+						<hr class="hr1"><br>
+
 
 						<div class="d-flex justify-content-between align-items-end">
 							<form method="get" th:action="@{/admin/users}" class="mb-3">
@@ -32,8 +39,9 @@
 							</form><br>
 							<form method="get" th:action="@{/admin/users/roleresearch}" class="mb-3">
 								<div class="col-md-13">
-										
-									<select class="form-control" name="keyword" th:value="${keyword}"onchange="submit(this.form)">
+
+									<select class="form-control" name="keyword" th:value="${keyword}"
+										onchange="submit(this.form)">
 										<option value="" disabled selected>--ロールから検索--</option>
 										<option value="ROLE_GENERAL">無料会員</option>
 										<option value="ROLE_SUBSCRIBER">有料会員</option>
@@ -41,7 +49,7 @@
 								</div>
 							</form>
 						</div>
-						
+
 					</div>
 
 					<div th:if="${successMessage}" class="alert alert-info">
@@ -56,6 +64,7 @@
 								<th scope="col">フリガナ</th>
 								<th scope="col">メールアドレス</th>
 								<th scope="col"></th>
+								<th scope="col"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -65,6 +74,32 @@
 								<td th:text="${user.getKana()}"></td>
 								<td th:text="${user.getEmail()}"></td>
 								<td><a th:href="@{/admin/users/__${user.getId()}__}">詳細</a></td>
+								<td><a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal"
+											th:data-bs-target="${'#deleteUserModal' + user.getId()}">削除</a>
+											</td>
+
+
+								<!-- 削除用モーダル -->
+								<div class="modal fade" th:id="${'deleteUserModal' + user.getId()}" tabindex="-1"
+									th:aria-labelledby="${'deleteUserModalLabel' + user.getId()}">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" th:id="${'deleteUserModalLabel' + user.getId()}"
+													th:text="${user.getName() + 'を削除してもよろしいですか？'}"></h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="閉じる"></button>
+											</div>
+											<div class="modal-footer">
+												<form method="post"
+													th:action="@{/admin/users/__${user.getId()}__/delete}">
+													<button type="submit"
+														class="btn nagoyameshi-btn-danger text-white shadow-sm">削除</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
 							</tr>
 						</tbody>
 					</table>

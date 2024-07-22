@@ -35,7 +35,7 @@ public class UserController {
         this.stripeService = stripeService;
     }    
     
-    @GetMapping
+    @GetMapping //会員情報ページ遷移用
     public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {         
         User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());  
         
@@ -44,7 +44,7 @@ public class UserController {
         return "user/index";
     }
     
-    @GetMapping("/edit")
+    @GetMapping("/edit") //会員情報編集ページ用
     public String edit(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {        
         User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());  
         UserEditForm userEditForm = new UserEditForm(user.getId(), user.getName(), user.getKana(), user.getAddress(), user.getPhone_number(), user.getEmail());
@@ -53,8 +53,9 @@ public class UserController {
         
         return "user/edit";
     }    
-    @PostMapping("/update")
-    public String update(@ModelAttribute @Validated UserEditForm userEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    @PostMapping("/update") //会員情報編集実行用
+    public String update(@ModelAttribute @Validated UserEditForm userEditForm, BindingResult bindingResult
+    		, RedirectAttributes redirectAttributes) {
         // メールアドレスが変更されており、かつ登録済みであれば、BindingResultオブジェクトにエラー内容を追加する
         if (userService.isEmailChanged(userEditForm) && userService.isEmailRegistered(userEditForm.getEmail())) {
             FieldError fieldError = new FieldError(bindingResult.getObjectName(), "email", "すでに登録済みのメールアドレスです。");
@@ -70,7 +71,7 @@ public class UserController {
         
         return "redirect:/user";
     }    
-    @GetMapping("/upgrade")
+    @GetMapping("/upgrade") //無料会員を有料会員にアップグレードする
     public String upgrade(Model model,HttpServletRequest httpServletRequest) {         
        
     	String sessionId = stripeService.createStripeSession(httpServletRequest);
@@ -79,7 +80,7 @@ public class UserController {
    	 return "user/confirm";
     }
     
-    @GetMapping("/upgradeExecution")
+    @GetMapping("/upgradeExecution") //無料会員を有料会員へアップグレード実行
     public String upgradeExecution(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl
     		,RedirectAttributes redirectAttributes) {         
     	

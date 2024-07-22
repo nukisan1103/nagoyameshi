@@ -50,24 +50,20 @@ public class AuthController {
       this.passResetTokenService = passResetTokenService;
       this.verificationTokenRepository = verificationTokenRepository;
  }    
+    //ログイン画面遷移用
     @GetMapping("/login")
     public String login() {
         return "auth/login";
     }
-
+    
+    //無料会員登録画面遷移用
     @GetMapping("/signup")
     public String signup(Model model) {        
         model.addAttribute("signupForm", new SignupForm());
         return "auth/signup";
     }    
-  
     
-    @GetMapping("/paidsignup")
-    public String paidSignup(Model model) {        
-        model.addAttribute("signupForm", new SignupForm());
-        return "auth/signup";
-    }
-    
+    //無料会員登録画面で登録ボタン押下後の処理
     @PostMapping("/signup")
      public String signup(@ModelAttribute @Validated SignupForm signupForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {
         // メールアドレスが登録済みであれば、BindingResultオブジェクトにエラー内容を追加する
@@ -93,6 +89,8 @@ public class AuthController {
 
         return "redirect:/";
     }
+    
+    //無料会員登録確認画面で、登録ボタン押下後の処理
     @GetMapping("/signup/verify")
     public String verify(@RequestParam(name = "token") String token, Model model) {
         VerificationToken verificationToken = verificationTokenService.getVerificationToken(token);

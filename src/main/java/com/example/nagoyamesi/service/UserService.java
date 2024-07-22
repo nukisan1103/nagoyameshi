@@ -1,5 +1,7 @@
 package com.example.nagoyamesi.service;
 
+import java.time.LocalDate;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +36,7 @@ public class UserService {
 		this.reviewRepository = reviewRepository;
 		this.reservationRepository = reservationRepository;
 	}
-
+	//会員登録用 登録時は無料会員となる
 	@Transactional
 	public User create(SignupForm signupForm) {
 		User user = new User();
@@ -51,7 +53,8 @@ public class UserService {
 
 		return userRepository.save(user);
 	}
-
+	
+	//会員情報編集用
 	@Transactional
 	public void update(UserEditForm userEditForm) {
 		//getReferenceById関数で、編集対象のユーザーのIDを取得する
@@ -74,6 +77,7 @@ public class UserService {
 		Role role = roleRepository.findByName("ROLE_SUBSCRIBER");
 
 		user.setRole(role);
+		user.setSubscriptionStartDate(LocalDate.now());//有料会員登録時の日付を記録する。売上管理用フィールド
 
 	}
 
@@ -109,7 +113,7 @@ public class UserService {
 
 		userRepository.save(user);
 	}
-	
+	//会員退会用 退会する会員の全てのデータを削除する
 	@Transactional
 	public void withdrawal(User user) {
 		

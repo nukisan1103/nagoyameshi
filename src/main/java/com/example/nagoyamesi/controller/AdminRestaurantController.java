@@ -24,7 +24,6 @@ import com.example.nagoyamesi.form.RestaurantEditForm;
 import com.example.nagoyamesi.form.RestaurantRegisterForm;
 import com.example.nagoyamesi.repository.CategoryRepository;
 import com.example.nagoyamesi.repository.RestaurantRepository;
-import com.example.nagoyamesi.service.CategoryService;
 import com.example.nagoyamesi.service.RestaurantService;
 
 @Controller
@@ -33,14 +32,13 @@ public class AdminRestaurantController {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantService restaurantService;
 	private final CategoryRepository categoryRepository;
-	private final CategoryService categoryService;
+
 
 	public AdminRestaurantController(RestaurantRepository restaurantRepository, RestaurantService restaurantService,
-			CategoryRepository categoryRepository, CategoryService categoryService) {
+			CategoryRepository categoryRepository) {
 		this.restaurantRepository = restaurantRepository;
 		this.restaurantService = restaurantService;
 		this.categoryRepository = categoryRepository;
-		this.categoryService = categoryService;
 
 	}
 
@@ -113,6 +111,7 @@ public class AdminRestaurantController {
 	public String edit(@PathVariable(name = "id") Integer id, Model model) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
 		String imageName = restaurant.getImage_name();
+		//入力フォームに予めこれまでの登録情報を渡す
 		RestaurantEditForm restaurantEditForm = new RestaurantEditForm(restaurant.getId(), restaurant.getCategoryName(),
 				restaurant.getName(), null,
 				restaurant.getDescription(), restaurant.getLowest_price(), restaurant.getHighest_price(),
@@ -156,6 +155,7 @@ public class AdminRestaurantController {
 		return "redirect:/admin/restaurants";
 	}
 	
+	//店舗一覧：カテゴリ検索実施事の処理
 	@GetMapping("/categorySearch")
 	public String categorySearch(Model model,
 			@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
@@ -165,7 +165,7 @@ public class AdminRestaurantController {
 			) {
 		Page<Restaurant> restaurants;
 		List<Category> categories = categoryRepository.findAll();
-					
+		//選択されたカテゴリがなければ全件表示			
 		if (category != null && !category.isEmpty()) {
 
 		restaurants = restaurantRepository.findByCategoryName(category, pageable);

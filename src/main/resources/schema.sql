@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS roles (
     address VARCHAR(255) NOT NULL,
     phone_number VARCHAR(50) NOT NULL,
     enabled BOOLEAN NOT NULL,
+    subscription_start_date Date,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (role_id) REFERENCES roles (id)
